@@ -9,7 +9,7 @@ const twitterClient = new Twitter({
 
 
 exports.fetchTweets = (term, date) => {
-  const query = `${term} since:${date}`
+  const query = `${term} :) since:${date}`
 
   return new Promise((resolve, reject) => {
     return twitterClient.get('search/tweets', {q: query, count: 500}, (error, tweets) => {
@@ -17,6 +17,7 @@ exports.fetchTweets = (term, date) => {
 
       const { statuses } = tweets;
 
+      console.log(`results for ${term}: ${statuses.length}`);
       return resolve(statuses.length);
     });
   })

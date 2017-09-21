@@ -19,6 +19,7 @@
     "bluebird": "^3.5.0",
     "micro": "^9.0.0",
     "moment": "^2.18.1",
+    "node-fetch": "^1.7.3",
     "redis": "^2.8.0",
     "twitter": "^1.7.1"
   },
