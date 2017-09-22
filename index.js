@@ -9,7 +9,7 @@ const config = require("./config/config");
 // update results every 1 minute
 // tweets in last 1 minute
 const TIME_WINDOW_MINUTES = 3;
-const TWITTER_TIME_WINDOW_MINUTES = 5;
+const TWITTER_TIME_WINDOW_MINUTES = 3;
 
 const fetchCoinTrends = ({ token, name }) => {
   // fetch coin trends for last 10 minutes
