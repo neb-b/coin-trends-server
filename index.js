@@ -2,7 +2,7 @@ const { send } = require('micro')
 const moment = require('moment')
 const { fetchTweets } = require("./src/twitter");
 const { fetchPrice, pushCoinPrice } = require('./src/coin')
-const redis = require("./src/redis");
+const { addTrendDataPoint } = require('./src/firebase');
 const config = require('./config/config')
 
 // the time window for everything - i don't know if it needs to be that way
@@ -13,30 +13,24 @@ const TWITTER_TIME_WINDOW_MINUTES = 5;
 
 const fetchCoinTrends = ({ token, name }) => {
   // fetch coin trends for last 10 minutes
-  const date = moment().subtract(TWITTER_TIME_WINDOW_MINUTES, 'm').toISOString();
-
-  const newRedisValues = {}
+  const twitterSearchBeginDate = moment().subtract(TWITTER_TIME_WINDOW_MINUTES, 'm').toISOString();
 
   Promise.all([
     // make two seperate fetchTweets calls because Twitter maxes at 100 repsonse
-    fetchTweets(token, date),
-    fetchTweets(name, date),
+    fetchTweets(token, twitterSearchBeginDate),
+    fetchTweets(name, twitterSearchBeginDate),
     fetchPrice(token)
   ])
   .then((promises) => {
     const results = promises.slice(0, 2);
     const tweetCount = results.reduce((count, val) => count + val)
-
     const { coin: { usd } } = promises[2];
 
-    newRedisValues.price = usd;
-    newRedisValues.tweetCount = tweetCount;
+    return { usd, tweetCount, token, time: Date.now() }
   })
-  .then((coinTweet) => redis.pushTweetCount(token, newRedisValues.tweetCount))
-  .then(() => redis.pushCoinPrice(token, newRedisValues.price))
-  // .then(() => broadcastNewValues(newRedisValues))
+  .then(addTrendDataPoint)
   .catch((err) => {
-    console.log('err', err);
+    console.log('\nerr', err);
   })
 }
 
@@ -52,6 +46,7 @@ config.coins.forEach((coin) => {
   setInterval(() => fetchCoinTrends(coin), fetchInterval)
 })
 
+fetchCoinTrends(config.coins[0])
 fetchCoinTrends(config.coins[1])
 
 module.exports = (req, res) => {
