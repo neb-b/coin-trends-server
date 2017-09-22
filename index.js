@@ -8,7 +8,7 @@ const config = require("./config/config");
 // the time window for everything - i don't know if it needs to be that way
 // update results every 1 minute
 // tweets in last 1 minute
-const TIME_WINDOW_MINUTES = 5;
+const TIME_WINDOW_MINUTES = 3;
 const TWITTER_TIME_WINDOW_MINUTES = 5;
 
 const fetchCoinTrends = ({ token, name }) => {
