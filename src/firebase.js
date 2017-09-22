@@ -10,18 +10,20 @@ if (!firebase.apps.length) {
   });
 }
 
-const database = firebase.database()
+const database = firebase.database();
 
-exports.addTrendDataPoint = (dataPointValues) => {
+exports.addTrendDataPoint = dataPointValues => {
   const token = dataPointValues.token;
   delete dataPointValues.token;
 
   const ref = database.ref(token);
 
-  ref.once('value').then((snapshot) => {
-      const trends = snapshot.val() || {}
-      const newTrends = Object.assign({}, trends, { [dataPointValues.time]: dataPointValues })
-
-      ref.set(newTrends);
-    })
-}
+  ref.once("value").then(snapshot => {
+    const trends = snapshot.val() || {};
+    const newTrends = Object.assign({}, trends, {
+      [dataPointValues.time]: dataPointValues
+    });
+    console.log("adding trend point");
+    ref.set(newTrends);
+  });
+};
