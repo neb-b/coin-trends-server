@@ -1,6 +1,7 @@
 const firebase = require("firebase");
 
 if (!firebase.apps.length) {
+  // eh i'll make a new app once this sort of works
   firebase.initializeApp({
     apiKey: "AIzaSyAZoMg2GRrrJ3eA1s-DenvusisuTe479DI",
     authDomain: "coin-trends.firebaseapp.com",

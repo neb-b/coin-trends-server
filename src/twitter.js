@@ -1,5 +1,6 @@
 const Twitter = require("twitter");
 
+// eh i'll make a new app once this sort of works
 const twitterClient = new Twitter({
   consumer_key: "1d0mB89rMki6l30FEnNsJb1ha",
   consumer_secret: "BpJcGfHup3SLG4Kl85ddyLPyKCK3QafYPveCQF9TbRjAmQZN2S",
